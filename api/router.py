@@ -8,11 +8,12 @@ router = APIRouter() #여러 엔드포인트(API 경로)를 그룹화하고 관�
 
 class RecommendRequest(BaseModel):
     user_input: str
+    user_month: int
 
 @router.post('/recommend')
 def get_recommendations(request: RecommendRequest):
     try:
-        recommendations = recommender.recommend(request.user_input)
+        recommendations = recommender.recommend(request.user_input, request.user_month)
         # result = recommendations.to_dict(orient='records')
         return {"recommendations": recommendations}
     except Exception as e:

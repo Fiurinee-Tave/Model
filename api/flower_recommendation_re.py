@@ -50,17 +50,33 @@ class FlowerRecommender:
                 break
         return month, season
 
-    def recommend(self, user_input):
+    def recommend(self, user_input, user_month=None):
         #사용자 벡터화
         user_input_cleaned = self.remove_special_characters(user_input)
         user_vector = self.get_sentence_embedding(user_input_cleaned)
 
         user_onehot_vector = np.zeros(len(self.encoder.get_feature_names_out(['월', '계절'])))
         month, season = self.extract_month_season(user_input)
-        if month is not None:
+        if month is None and user_month is not None: #사용자가 입력한 월 기준으로 추출
+            month = user_month
             month_idx = self.encoder.get_feature_names_out(['월', '계절']).tolist().index(f'월_{month}')
             user_onehot_vector[month_idx] = 1
-        if season is not None:
+        if season is None and month is not None: #사용자가 입력한 월 기준으로 계절 추출
+            if month in [3, 4, 5]:
+                season = '봄'
+            elif month in [6, 7, 8]:
+                season = '여름'
+            elif month in [9, 10, 11]:
+                season = '가을'
+            else:
+                season = '겨울'
+            season_idx = self.encoder.get_feature_names_out(['월', '계절']).tolist().index(f'계절_{season}')
+            user_onehot_vector[season_idx] = 1
+            
+        if month is not None: #텍스트에 입력된 월
+            month_idx = self.encoder.get_feature_names_out(['월', '계절']).tolist().index(f'월_{month}')
+            user_onehot_vector[month_idx] = 1
+        if season is not None: #텍스트에 입력된 계절
             season_idx = self.encoder.get_feature_names_out(['월', '계절']).tolist().index(f'계절_{season}')
             user_onehot_vector[season_idx] = 1
         user_onehot_vector = user_onehot_vector.reshape(1, 16) #(1,16)

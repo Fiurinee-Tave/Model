@@ -8,7 +8,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.metrics.pairwise import cosine_similarity
 
 #데이터 로드
-df_nlp = pd.read_csv(r"C:\Users\82104\Desktop\tave\추천시스템_데이터 (1).csv")
+df_nlp = pd.read_csv("C:/Users/pc/Model/Model-4/dataset/추천시스템_데이터.csv")
 
 # JSON 문자열을 배열로 변환
 df_nlp['최종_벡터'] = df_nlp['최종_벡터'].apply(lambda x: np.array(json.loads(x)))

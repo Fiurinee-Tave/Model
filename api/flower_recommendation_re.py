@@ -91,4 +91,4 @@ class FlowerRecommender:
         return recommendations[['꽃', '꽃말', '유사도']].to_dict(orient='records')
 
 # 인스턴스 초기화
-recommender = FlowerRecommender(data_path="/content/추천시스템_데이터.csv")
+recommender = FlowerRecommender(data_path="dataset/추천시스템_데이터.csv")

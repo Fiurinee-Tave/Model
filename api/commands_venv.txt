@@ -1,0 +1,11 @@
+py -m venv venv
+pip install uvicorn
+pip install fastapi
+uvicorn api.main:app --reload --port 8080  / 8000번 포트가 다른 프로세스에서 사용되는 듯
+pip install pytest
+pip install requests
+pip freeze > requiremnets.txt
+pip install mangum
+
+<실행 과정>
+venv\Scripts\activate (가상환경 들어가기)

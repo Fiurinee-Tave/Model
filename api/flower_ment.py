@@ -1,8 +1,13 @@
 import openai
+from dotenv import load_dotenv
+import os
+
+# .env 파일에서 환경 변수를 로드합니다.
+load_dotenv()
 
 class Flower_Ment:
-    def __init__(self, api_key):
-        self.api_key = api_key
+    def __init__(self):
+        self.api_key = os.getenv("OPENAI_API_KEY")
         openai.api_key = self.api_key
     
     def get_completion(self, prompt, model="gpt-4"):
@@ -24,8 +29,3 @@ class Flower_Ment:
         )
 
         return self.get_completion(prompt)
-
-    
-
-# 인스턴스 초기화
-recommender = Flower_Ment(api_key='')

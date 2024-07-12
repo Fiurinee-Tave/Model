@@ -24,11 +24,11 @@ class FlowerMentRequest(BaseModel): #멘트 생성 모델
 @router.post('/recommend') #꽃 추천 모델
 def recommend_flowers(request:RecommendRequest):
     try:
-        recommendation: recommender.recommend_flower(request.user_input, request.user_month) # type: ignore
+        recommendation = recommender.recommend_flower(request.user_input, request.user_month)
         return {"recommendations": recommendation}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
+    
 @router.post('/flower_color') #어울리는 색상 모델
 def get_flowers_color_list(request: FlowerColorRequest):
     try:

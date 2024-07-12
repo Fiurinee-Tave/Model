@@ -43,12 +43,13 @@ class FlowerRecommender:
         clean_text = re.sub(pattern, '', clean_text)
         clean_text = ' '.join(clean_text.split())
         return clean_text
-    
+   
     def get_sentence_embedding(self, text):
         inputs = self.tokenizer(text, return_tensors='pt', truncation=True, padding=True)
         outputs = self.model(**inputs)
         return outputs.last_hidden_state[:, 0, :].detach().numpy()
 
+    #색상 유무에 따라 최종 벡터 다르게 생성
     def create_combined_vector(self, row):
         설명_벡터 = row['설명_벡터']
         색상_벡터 = row['색상_벡터']
@@ -104,7 +105,7 @@ class FlowerRecommender:
         return user_input
 
 
-    def get_user_input_vector(self, user_input, user_month=None):
+    def get_user_input_vector(self, user_input, user_month):
         input_text = self.remove_special_characters(user_input)
         input_embeddings = self.get_sentence_embedding(input_text)
         input_color_text = self.extract_color(user_input)
@@ -112,14 +113,42 @@ class FlowerRecommender:
 
         # 원핫 벡터 생성
         user_onehot_vector = np.zeros(len(self.encoder.get_feature_names_out(['월', '계절'])))
-        if month is not None:
+        if month is None and season is None: #사용자 작성 날 기준의 달 추출
+            month = user_month
+            if month in [3, 4, 5]:
+                season = '봄'
+            elif month in [6, 7, 8]:
+                season = '여름'
+            elif month in [9, 10, 11]:
+                season = '가을'
+            else:
+                season = '겨울'
             month_idx = self.encoder.get_feature_names_out(['월', '계절']).tolist().index(f'월_{month}')
+            season_idx = self.encoder.get_feature_names_out(['월', '계절']).tolist().index(f'계절_{season}')
             user_onehot_vector[month_idx] = 1
-        if season is not None:
+            user_onehot_vector[season_idx] = 1
+
+        if season is None and month is not None: #사용자가 텍스트에 입력한 월 기준으로 계절 추출
+            if month in [3, 4, 5]:
+                season = '봄'
+            elif month in [6, 7, 8]:
+                season = '여름'
+            elif month in [9, 10, 11]:
+                season = '가을'
+            else:
+                season = '겨울'
             season_idx = self.encoder.get_feature_names_out(['월', '계절']).tolist().index(f'계절_{season}')
             user_onehot_vector[season_idx] = 1
-        user_onehot_vector = user_onehot_vector.reshape(1, -1)  # (1, 16)
+        
+        if month is not None: #텍스트에 입력된 월
+            month_idx = self.encoder.get_feature_names_out(['월', '계절']).tolist().index(f'월_{month}')
+            user_onehot_vector[month_idx] = 1
+        if season is not None: #텍스트에 입력된 계절
+            season_idx = self.encoder.get_feature_names_out(['월', '계절']).tolist().index(f'계절_{season}')
+            user_onehot_vector[season_idx] = 1
+        user_onehot_vector = user_onehot_vector.reshape(1, -1) #(1,16)
 
+        # 벡터 결합
         if input_color_text:
             color_embeddings = self.get_sentence_embedding(input_color_text)
             user_vector = np.concatenate((input_embeddings, color_embeddings, user_onehot_vector), axis=1)
@@ -177,15 +206,16 @@ class FlowerRecommender:
 
         return weight
 
-    def recommend_flower(self, user_input, df, tokenizer, model):
+    def recommend_flower(self, user_input, user_month=None):
         # 사용자 입력 처리 (문맥 추가)
         user_input = self.add_context_if_noun(user_input)
-        user_vector = self.get_user_input_vector(user_input)
+        user_vector = self.get_user_input_vector(user_input, user_month)
         input_color = self.extract_color(user_input)
+        df =self.df_nlp
 
         if input_color: # 색상이 명시된 경우 해당 색상의 꽃들로 필터링
-
             filtered_df = df[df['색상'] == input_color]
+            filtered_df['최종_벡터'] = filtered_df.apply(lambda row: self.create_combined_vector(row), axis=1)
         else: # 색상이 명시되지 않은 경우 결합 벡터에서 색상 벡터를 제외
             filtered_df = df.copy()
             filtered_df['최종_벡터'] = filtered_df.apply(lambda row: self.create_combined_vector_without_color(row), axis=1)
@@ -202,11 +232,7 @@ class FlowerRecommender:
             additional_top = additional_top[~additional_top['꽃'].isin(top3['꽃'])]
             top3 = pd.concat([top3, additional_top]).nlargest(3, '유사도').drop_duplicates(subset='꽃')
 
-        return top3[['꽃', '꽃말', '색상', '유사도']]
+        return top3[['꽃', '꽃말', '유사도']].to_dict('records')
     
-    def get_recommendations(self, user_input):
-        recommendations = self.recommend_flower(user_input, self.df_nlp, self.tokenizer, self.model)
-        return recommendations[['꽃', '꽃말', '유사도']].to_dict('records')
-
 # 인스턴스 초기화
 recommender = FlowerRecommender(data_path="dataset/추천시스템_데이터.csv")

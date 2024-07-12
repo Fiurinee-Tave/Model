@@ -1,8 +1,8 @@
 import uvicorn
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from .flower_recommendation_re import recommender
-from .color_flower import recommender
+from .flower_recommendation_re import recommender as flower_recommender
+from .color_flower import recommender as color_recommender
 from .flower_ment import Flower_Ment
 
 #라우터 객체 생성
@@ -24,7 +24,7 @@ class FlowerMentRequest(BaseModel): #멘트 생성 모델
 @router.post('/recommend') #꽃 추천 모델
 def recommend_flowers(request:RecommendRequest):
     try:
-        recommendation = recommender.recommend_flower(request.user_input, request.user_month)
+        recommendation = flower_recommender.recommend_flower(request.user_input, request.user_month)
         return {"recommendations": recommendation}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -32,7 +32,7 @@ def recommend_flowers(request:RecommendRequest):
 @router.post('/flower_color') #어울리는 색상 모델
 def get_flowers_color_list(request: FlowerColorRequest):
     try:
-        flower_color_list = recommender.result_flower(request.flower_name, request.flower_mean)
+        flower_color_list = color_recommender.result_flower(request.flower_name, request.flower_mean)
         return {"flower_color_list": flower_color_list}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

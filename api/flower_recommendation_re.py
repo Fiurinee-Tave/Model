@@ -14,7 +14,7 @@ class FlowerRecommender:
         self.df_nlp['설명_벡터'] = self.df_nlp['설명_벡터'].apply(lambda x: np.array(json.loads(x)))
         self.df_nlp['색상_벡터'] = self.df_nlp['색상_벡터'].apply(lambda x: np.array(json.loads(x)))
         self.df_nlp['원핫인코딩'] = self.df_nlp['원핫인코딩'].apply(lambda x: np.array([float(num) for num in x.strip('[]').split()]).reshape(1, -1))
-        
+
         model_name = 'klue/roberta-small'
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         self.model = AutoModel.from_pretrained(model_name)
@@ -37,15 +37,18 @@ class FlowerRecommender:
             }
     
     def remove_special_characters(self, text):
-        pattern = r'[^\w\s\.]' #특수문자 제거
+        if not isinstance(text, str):
+            text = str(text)
+        pattern = r'[^\w\s\.]' # 문자, 공백문자, 마침표 제외 제거
         clean_text = re.sub(pattern, '', text)
-        pattern = r'[\u4e00-\u9fff]' #한자 제거
+
+        pattern = r'[\u4e00-\u9fff]' # 중국어 한자의 유니코드 시작과 끝 제거
         clean_text = re.sub(pattern, '', clean_text)
         clean_text = ' '.join(clean_text.split())
         return clean_text
    
     def get_sentence_embedding(self, text):
-        inputs = self.tokenizer(text, return_tensors='pt', truncation=True, padding=True)
+        inputs = self.tokenizer(text, return_tensors='pt', truncation=True, padding=True) 
         outputs = self.model(**inputs)
         return outputs.last_hidden_state[:, 0, :].detach().numpy()
 
@@ -93,7 +96,6 @@ class FlowerRecommender:
 
     def is_noun_phrase(self, text):
         pos_tags = self.okt.pos(text)
-        print(f"Text: {text}, POS Tags: {pos_tags}")
         for word, tag in pos_tags:
             if tag != 'Noun':
                 return False
@@ -113,7 +115,7 @@ class FlowerRecommender:
 
         # 원핫 벡터 생성
         user_onehot_vector = np.zeros(len(self.encoder.get_feature_names_out(['월', '계절'])))
-        if month is None and season is None: #사용자 작성 날 기준의 달 추출
+        if month is None and season is None: #사용자가 쓰는 날의 달 추출
             month = user_month
             if month in [3, 4, 5]:
                 season = '봄'
@@ -128,7 +130,7 @@ class FlowerRecommender:
             user_onehot_vector[month_idx] = 1
             user_onehot_vector[season_idx] = 1
 
-        if season is None and month is not None: #사용자가 텍스트에 입력한 월 기준으로 계절 추출
+        if season is None and month is not None: #사용자가 입력한 월 기준으로 계절 추출
             if month in [3, 4, 5]:
                 season = '봄'
             elif month in [6, 7, 8]:
@@ -139,7 +141,7 @@ class FlowerRecommender:
                 season = '겨울'
             season_idx = self.encoder.get_feature_names_out(['월', '계절']).tolist().index(f'계절_{season}')
             user_onehot_vector[season_idx] = 1
-        
+            
         if month is not None: #텍스트에 입력된 월
             month_idx = self.encoder.get_feature_names_out(['월', '계절']).tolist().index(f'월_{month}')
             user_onehot_vector[month_idx] = 1
@@ -194,33 +196,31 @@ class FlowerRecommender:
         #사용자 월 추출
         month, season = self.extract_month_season(user_input)
 
-        # 꽃의 설명 및 월,계절에 따른 추가 가중치 적용
         if any(event in row['설명'] for event in event_weights.keys() if event in user_input):
             weight *= 1.2
-        # 월에 따른 추가 가중치 적용
         if month and isinstance(row['월'], int) and month == row['월']:
             weight *= 1.2
-        # 계절에 따른 추가 가중치 적용
         if season and isinstance(row['계절'], str) and season == row['계절']:
             weight *= 1.2
-
         return weight
-
+    
     def recommend_flower(self, user_input, user_month=None):
-        # 사용자 입력 처리 (문맥 추가)
         user_input = self.add_context_if_noun(user_input)
         user_vector = self.get_user_input_vector(user_input, user_month)
         input_color = self.extract_color(user_input)
-        df =self.df_nlp
+        df = self.df_nlp
 
-        if input_color: # 색상이 명시된 경우 해당 색상의 꽃들로 필터링
+        if input_color:
+            # 색상이 명시된 경우 해당 색상의 꽃들로 필터링
             filtered_df = df[df['색상'] == input_color]
             filtered_df['최종_벡터'] = filtered_df.apply(lambda row: self.create_combined_vector(row), axis=1)
-        else: # 색상이 명시되지 않은 경우 결합 벡터에서 색상 벡터를 제외
+        else:
+            # 색상이 명시되지 않은 경우 결합 벡터에서 색상 벡터를 제외
             filtered_df = df.copy()
             filtered_df['최종_벡터'] = filtered_df.apply(lambda row: self.create_combined_vector_without_color(row), axis=1)
 
-        filtered_df['유사도'] = filtered_df.apply(lambda row: cosine_similarity(user_vector, np.array(row['최종_벡터']).reshape(1, -1))[0][0] * apply_event_weight_for_row(user_input, row), axis=1)
+        # 각 행에 대해 가중치 계산 및 유사도 산출
+        filtered_df['유사도'] = filtered_df.apply(lambda row: cosine_similarity(user_vector, np.array(row['최종_벡터']).reshape(1, -1))[0][0] * self.apply_event_weight_for_row(user_input, row), axis=1)
         filtered_df['유사도'] = filtered_df['유사도'].astype(float)  # 숫자형으로 변환
 
         # 유사도를 기준으로 상위 3개의 꽃을 선택하고 중복된 꽃을 제거

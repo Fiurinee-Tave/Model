@@ -22,11 +22,10 @@ class FlowerMentRequest(BaseModel): #멘트 생성 모델
     flower_mean: str
 
 @router.post('/recommend') #꽃 추천 모델
-def get_recommendations(request: RecommendRequest):
+def recommend_flowers(request:RecommendRequest):
     try:
-        recommendations = recommender.recommend_flower(request.user_input, request.user_month)
-        # result = recommendations.to_dict(orient='records')
-        return {"recommendations": recommendations}
+        recommendation: recommender.recommend_flower(request.user_input, request.user_month) # type: ignore
+        return {"recommendations": recommendation}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

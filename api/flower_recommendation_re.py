@@ -127,7 +127,6 @@ class FlowerRecommender:
             user_vector = np.concatenate((input_embeddings, user_onehot_vector), axis=1)
         return user_vector
 
-   
     def apply_event_weight_for_row(self, user_input, row):
         event_weights = {
             '발렌타인': 1.2,
@@ -160,17 +159,22 @@ class FlowerRecommender:
 
         for event, event_weight in event_weights.items():
             if event in user_input:
-                weight = event_weight
+                weight *= event_weight
                 break
-        month, _ = self.extract_month_season(user_input)
-        if month is not None:
-            weight *= 1.2
-        season, _ = self.extract_month_season(user_input)
-        if season is not None:
-            weight *= 1.2
 
+        #사용자 월 추출
+        month, season = self.extract_month_season(user_input)
+
+        # 꽃의 설명 및 월,계절에 따른 추가 가중치 적용
         if any(event in row['설명'] for event in event_weights.keys() if event in user_input):
             weight *= 1.2
+        # 월에 따른 추가 가중치 적용
+        if month and isinstance(row['월'], int) and month == row['월']:
+            weight *= 1.2
+        # 계절에 따른 추가 가중치 적용
+        if season and isinstance(row['계절'], str) and season == row['계절']:
+            weight *= 1.2
+
         return weight
 
     def recommend_flower(self, user_input, df, tokenizer, model):

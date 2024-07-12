@@ -7,7 +7,7 @@ load_dotenv()
 
 class Flower_Ment:
     def __init__(self):
-        self.api_key = os.getenv("OPENAI_API_KEY")
+        self.api_key = os.getenv("api_key")
         openai.api_key = self.api_key
     
     def get_completion(self, prompt, model="gpt-4"):

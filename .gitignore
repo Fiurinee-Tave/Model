@@ -125,6 +125,7 @@ celerybeat.pid
 
 # Environments
 .env
+api_key.env
 .venv
 env/
 venv/

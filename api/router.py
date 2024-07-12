@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from .flower_recommendation_re import recommender
 from .color_flower import recommender
-from .flower_ment import recommender
+from .flower_ment import Flower_Ment
 
 #라우터 객체 생성
 router = APIRouter() #여러 엔드포인트(API 경로)를 그룹화하고 관리하는 데 사용
@@ -40,9 +40,9 @@ def get_flowers_color_list(request: FlowerColorRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post('/ment') #멘트 생성 모델
-def get_ment(request: FlowerColorRequest):
+def get_ment(request: FlowerMentRequest):
     try:
-        flower_ment = recommender.result_ment(request.user_input, request.flower_name, request.flower_mean)
+        flower_ment = Flower_Ment().result_ment(request.user_input, request.flower_name, request.flower_mean)
         return {"flower_ment": flower_ment}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -19,13 +19,12 @@
 </tab> 1. 전처리 </br>
 </tab> 2. 토큰화, 벡터화(bert) </br>
 </tab> 3. 사용자 입력 및 유사도 계산 </br>
-</tab> 4. 성능평가 (벡터:bert, bigbird, KLUEroberta / 유사도: cosine, vec db) </br>
-</tab> </tab> - 간단 비교 결과 bert(cosine), KLUE(cosine)으로 결정 -> 정확도 비교 결과 KLUE(cosine)으로 결정
 
-- 성능평가 </br>
+- 성능평가 (벡터:bert, bigbird, KLUEroberta / 유사도: cosine, vec db) </br>
 </tab> 1. 테스트셋 구축 (월, 계절, 색상 키워드 기준) </br>
 </tab> 2. 키워드 유무 기준으로 성능 평가 </br>
 </tab> *참고용 정도로만 사용
+</tab> </tab> - 간단 비교 결과 bert(cosine), KLUE(cosine)으로 결정 -> 정확도 비교 결과 KLUE(cosine)으로 결정
 
 
 ### 2️⃣ 생성형 모델을 통해 선정 꽃과 어울리는 선물 멘트 생성

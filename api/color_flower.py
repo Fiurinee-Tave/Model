@@ -8,6 +8,7 @@ class Flower_Color_List:
     
     def result_flower(self, flower_name, flower_mean):
         result_flower=self.df[(self.df['꽃']==flower_name) & (self.df['꽃말']==flower_mean)]
+        result_flower = result_flower.drop_duplicates(subset=['꽃', '꽃말'])
 
         combined_result = pd.concat([
         result_flower[['꽃1', '선택한 색상1']].rename(columns={'꽃1': '꽃', '선택한 색상1': '선택한 색상'}),

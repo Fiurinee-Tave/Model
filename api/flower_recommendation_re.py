@@ -119,7 +119,7 @@ class FlowerRecommender:
             if tag == 'Noun':
                 noun_list.append(word)
         for noun in noun_list:
-            for key, values in lexicon.items():
+            for key, values in self.lexicon.items():
                 if noun in values:
                     user_input = re.sub(noun, key, user_input)
         if "연인" in user_input:

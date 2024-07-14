@@ -262,7 +262,7 @@ class FlowerRecommender:
     def recommend_flower(self, user_input, user_month=None):
         self.df_nlp['model_similarity'] = self.Klue_similarities(user_input, user_month)
 
-        tfidf_matrix = self.tfidf_vectorizer.fit_transform(df_nlp['설명']) # 문서 집합을 tfidf 벡터화
+        tfidf_matrix = self.tfidf_vectorizer.fit_transform(self.df_nlp['설명']) # 문서 집합을 tfidf 벡터화
         user_tfidf = self.tfidf_vectorizer.transform([user_input]) # 사용자 입력 TF-IDF 벡터화
         # 각 문서와 사용자 입력 간의 코사인 유사도 계산
         similarities = cosine_similarity(user_tfidf, tfidf_matrix)

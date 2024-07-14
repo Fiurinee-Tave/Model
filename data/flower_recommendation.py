@@ -5,6 +5,7 @@ import re
 
 from transformers import BertModel, BertTokenizer
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 #데이터 로드

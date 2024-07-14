@@ -253,7 +253,7 @@ class FlowerRecommender:
             filtered_df['최종_벡터'] = filtered_df.apply(lambda row: self.create_combined_vector_without_color(row), axis=1)
 
         # 각 행에 대해 가중치 계산 및 유사도 산출
-        filtered_df['유사도'] = filtered_df.apply(lambda row: cosine_similarity(user_vector, np.array(row['최종_벡터']).reshape(1, -1))[0][0] * apply_event_weight_for_row(user_input, row), axis=1)
+        filtered_df['유사도'] = filtered_df.apply(lambda row: cosine_similarity(user_vector, np.array(row['최종_벡터']).reshape(1, -1))[0][0] * self.apply_event_weight_for_row(user_input, row), axis=1)
         filtered_df['유사도'] = filtered_df['유사도'].astype(float)  # 숫자형으로 변환
 
         return filtered_df['유사도']

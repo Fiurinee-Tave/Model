@@ -5,6 +5,7 @@ import re
 
 from transformers import AutoTokenizer, AutoModel
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.feature_extraction.text import TfidfVectorizer
 from konlpy.tag import Okt
 from sklearn.metrics.pairwise import cosine_similarity
 

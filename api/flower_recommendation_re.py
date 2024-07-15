@@ -288,7 +288,7 @@ class FlowerRecommender:
         if top3.shape[0] < 3:
             additional_top = self.df_nlp.nlargest(20, 'combined_similarity')  # 상위 20개 정도를 선택
             additional_top = additional_top[~additional_top['꽃'].isin(top3['꽃'])]
-            top3 = pd.concat([top3, additional_top]).nlargest(3, '유사도').drop_duplicates(subset='꽃')
+            top3 = pd.concat([top3, additional_top]).nlargest(3, 'combined_similarity').drop_duplicates(subset='꽃')
 
         return top3[['꽃', '꽃말', 'combined_similarity']].to_dict('records')
 

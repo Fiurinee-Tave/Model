@@ -5,6 +5,11 @@
 ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white) &nbsp; ![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white) &nbsp; ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white) &nbsp; ![scikit-learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)&nbsp;<br>
 ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)&nbsp; ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)&nbsp; ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) &nbsp; ![amazon](https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white) 
 
+## 📅 개발 기간
+ - 2024-05-12 ~ 2024-07-16
+
+## 모델 구현 과정
+
 ### 1️⃣ 사용자 입력과 데이터셋을 이용하 가장 어울리는 꽃을 제공해주는 추천 시스템 구현 (3개의 꽃 추천)
 - 데이터 구축: 최종 837개의 데이터 사용 </br>
 </tab> - "농촌진흥청 국립원예특작과학원 오늘의 꽃"(open API), "순천만국가정원 탄생화"(pdf), “어니스트 플라워”의 꽃도감(웹크롤링/Selenium) 데이터 사용 </br>

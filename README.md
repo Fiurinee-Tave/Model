@@ -7,7 +7,7 @@
 <br>
 <br>
 ## 🧑🏻‍💻Team Member
-|**김민지**|**김혜원**|**원종효**|
+|**김민지**|**원종효**|**김헤원**|
 |:-----:|:-----:|:-----:|
 |  <img src="https://github.com/Tave-13th-Project-Team-4-Fiurinee/.github/blob/main/profile/image/%EA%B9%80%EB%AF%BC%EC%A7%80.jpg" alt="김민지" width="150" height="150"> | <img src="https://github.com/Tave-13th-Project-Team-4-Fiurinee/.github/blob/main/profile/image/%EC%9B%90%EC%A2%85%ED%9A%A8.jpg" alt="원종효" width="150" height="150"> | <img src="https://github.com/user-attachments/assets/e30a7fea-26a0-4b2b-bbef-6706085fb2b7" alt="김혜원" width="150" height="150">| 
 <br>

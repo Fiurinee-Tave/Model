@@ -6,6 +6,11 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)&nbsp; ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)&nbsp; ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) &nbsp; ![amazon](https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white) 
 <br>
 <br>
+## 🧑🏻‍💻Team Member
+|**김민지**|**김혜원**|**원종효**|
+|:-----:|:-----:|:-----:|
+| [<img src="https://github.com/Tave-13th-Project-Team-4-Fiurinee/.github/blob/main/profile/image/%EC%9D%B4%EC%A4%80%EB%B2%94.jpg" alt="이준범" width="150" height="150"> <br/> @ss7622](https://github.com/ss7622) | [<img src="https://github.com/Tave-13th-Project-Team-4-Fiurinee/.github/blob/main/profile/image/%EB%B0%B1%EC%A7%80%ED%98%84.jpg" alt="백지현" width="150" height="150"> <br/> @qormoon](https://github.com/qormoon) | 
+<br>
 
 ## 📅 개발 기간
 ***

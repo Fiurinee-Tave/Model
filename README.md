@@ -48,7 +48,7 @@
 </tab> *참고용 정도로만 사용
 </tab> </tab> - 간단 비교 결과 bert(cosine), KLUE(cosine)으로 결정 -> 정확도 비교 결과 KLUE(cosine)으로 결정 (맥락적인 부분)
 </tab> </tab> - 키워드 판단을 위해 TF-IDF도 섞어서 사용
-</tab> </tab> - 최종: KLUE-RoBERTa + TF-IDF 를 사용
+</tab> </tab> - 최종: KLUE-RoBERTa + TF-IDF 를 8:2 비율로 사용
 
 
 ### 2️⃣ 생성형 모델을 통해 선정 꽃과 어울리는 선물 멘트 생성

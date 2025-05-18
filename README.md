@@ -42,11 +42,11 @@
 </tab> 2. 토큰화, 벡터화(bert) </br>
 </tab> 3. 사용자 입력 및 유사도 계산 </br>
 
-- 성능평가 (벡터:bert, bigbird, KLUEroberta / 유사도: cosine, vec db) </br>
+- 성능평가 (벡터:BERT, bigbird, KLUEroberta / 유사도: cosine, vec db) </br>
 </tab> 1. 테스트셋 구축 (월, 계절, 색상 키워드 기준) </br>
 </tab> 2. 키워드 유무 기준으로 성능 평가 </br>
 </tab> *참고용 정도로만 사용 </br>
-</tab> *간단 비교 결과 bert(cosine), KLUE(cosine)으로 결정 -> 정확도 비교 결과 KLUE(cosine)으로 결정 (맥락적인 부분) </br>
+</tab> *간단 비교 결과 BERT(cosine), KLUE(cosine)으로 결정 -> 정확도 비교 결과 KLUE(cosine)으로 결정 (맥락적인 부분) </br>
 </tab> * 키워드 판단을 위해 TF-IDF도 섞어서 사용 </br>
 </tab> **최종: KLUE-RoBERTa + TF-IDF 를 8:2 비율로 사용**
 
